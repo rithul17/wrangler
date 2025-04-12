@@ -64,6 +64,8 @@ directive
     | stringList
     | numberRanges
     | properties
+    | byteSizeArg      
+    | timeDurationArg
   )*?
   ;
 
@@ -195,6 +197,14 @@ identifierList
  : Identifier (',' Identifier)*
  ;
 
+//parser for bytesize and timeduration
+byteSizeArg 
+  : BYTE_SIZE
+  ;
+
+timeDurationArg 
+  : TIME_DURATION
+  ;
 
 /*
  * Following are the Lexer Rules used for tokenizing the recipe.
@@ -311,3 +321,23 @@ fragment Int
 fragment Digit
  : [0-9]
  ;
+
+//lexer part for the byte size and time duration feature
+BYTE_SIZE 
+ : Digit+ ('.' Digit+)? BYTE_UNIT
+ ;
+
+fragment BYTE_UNIT
+ : ([Kk][Bb] | [Mm][Bb] | [Gg][Bb] | [Tt][Bb] | [Bb])
+ ;
+
+TIME_DURATION 
+ : Digit+ ('.' Digit+)? TIME_UNIT
+ ;
+
+fragment TIME_UNIT
+ : ('ms' | 's' | 'min' | 'h' | 'd'
+   | 'MS' | 'S' | 'MIN' | 'H' | 'D')
+  ;
+
+
